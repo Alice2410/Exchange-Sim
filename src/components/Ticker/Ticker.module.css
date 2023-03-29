@@ -1,0 +1,25 @@
+.ticker {
+  border: 2px grey solid;
+  border-radius: 3px;
+  padding: 20px;
+  margin-top: 10px;
+  width: 200px;
+  background-color: rgb(202, 237, 202);
+}
+
+.trader_container{
+  position: relative;
+  width: 200px;
+  display: flex;
+  gap: 20px;
+}
+
+.trader_container::after{
+  position: absolute;
+  content: "";
+  width: 1px;
+  height: 100%;
+  background-color: grey;
+  top: 0;
+  left: 50%;
+}
