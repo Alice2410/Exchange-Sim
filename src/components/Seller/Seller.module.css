@@ -1,0 +1,19 @@
+.seller{
+  display: flex;
+  flex-direction: column;
+}
+
+.seller_cost{
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.seller_button{
+  padding: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  background-color: green;
+  border: 1px black solid;
+}
