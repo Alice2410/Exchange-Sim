@@ -1,0 +1,19 @@
+.buyer{
+  display: flex;
+  flex-direction: column;
+}
+
+.buyer_cost{
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.buyer_button{
+  padding: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  background-color: red;
+  border: 1px black solid;
+}
