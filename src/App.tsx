@@ -1,16 +1,26 @@
+import { useEffect } from 'react';
 import styles from './App.module.css';
-import AddTickerButton from './components/AddTickerButton/AddTickerButton';
-import Ticker from './components/Ticker/Ticker';
-import { TickerProvider } from './context/TickerContext';
+import Table from './components/Table/Table';
+import TickerContainer from './components/TickerContainer/TickerContainer';
+
+import { useWebSocket } from './hooks/useWebSocket';
+
 
 function App() {
+  const {connect, closeConnection} = useWebSocket();
+  
+  useEffect(() => {
+    connect();
+
+    return(
+     () => closeConnection()
+    )
+  }, []);
+
   return (
     <div className={styles.app}>
-      <TickerProvider>
-        <AddTickerButton></AddTickerButton>
-        <Ticker></Ticker>
-      </TickerProvider>
-      
+      <TickerContainer></TickerContainer>
+      <Table></Table>
     </div>
   );
 }
