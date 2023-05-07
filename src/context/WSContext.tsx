@@ -1,8 +1,9 @@
 import React, { ReactNode, useRef, useState } from "react";
-import { mockServer } from "../mockServer";
-import { WebSocket } from 'mock-socket';
+// import { mockServer } from "../mockServer";
+// import { WebSocket } from 'mock-socket';
 import { ServerMessageType } from "../Enums";
 import { Offer, ServerEnvelope } from "../Models/ServerMessages";
+import io, { Socket } from 'socket.io-client';
 
 interface WSProviderProps {
   children: ReactNode;
@@ -19,66 +20,73 @@ export const WSContext = React.createContext({} as WSContextValue);
 
 export const WSProvider = ({children}: WSProviderProps) => {
   const [tableData, setTableData] = useState<Offer[]>([]);
-  const socket = useRef<WebSocket | undefined>();
-  const hasServer = useRef(false);
+  const socket = useRef<Socket>();
 
-  function connect () {
-    if(!socket.current) {
-      const fakeURL = 'ws://localhost:8080';
+  function connect () {  
+    socket.current = io(`http://localhost:3000`, { transports: ["websocket"] });
+        
+    socket.current.on('initial table data', (data) => {
+      console.log(data);
+      setTableData([...tableData, ...data])
+    })
+     
+        
+    // if(!socket.current) {
+    //   const fakeURL = 'ws://localhost:8080';
       
-      if(!hasServer.current) {   
-        const wsServer = new mockServer(fakeURL);
-        wsServer.initialise();
+    //   if(!hasServer.current) {   
+    //     const wsServer = new mockServer(fakeURL);
+    //     wsServer.initialise();
 
-        hasServer.current = true;
-      }
+    //     hasServer.current = true;
+    //   }
       
-      socket.current = new WebSocket(fakeURL);
-    }
+    //   socket.current = new WebSocket(fakeURL);
+    // }
 
-    if(socket.current) {   
-      socket.current.send('hello from client') ;
+    // if(socket.current) {   
+    //   socket.current.send('hello from client') ;
 
-      socket.current.onclose = () => console.log('WebSocket connection has been closed');
+    //   socket.current.onclose = () => console.log('WebSocket connection has been closed');
       
-      socket.current.onerror = () => {
+    //   socket.current.onerror = () => {
   
-      };
+    //   };
   
-      socket.current.onopen = () => console.log('WebSocket connection has been opened');
+    //   socket.current.onopen = () => console.log('WebSocket connection has been opened');
   
-      socket.current.onmessage = (event) => {
-        const message: ServerEnvelope = JSON.parse(event.data);
-        console.log('message from server', message.message);
+    //   socket.current.onmessage = (event) => {
+    //     const message: ServerEnvelope = JSON.parse(event.data);
+    //     console.log('message from server', message.message);
         
         
-        switch (message.messageType) {
-          case ServerMessageType.success:
-            console.log(message.message);
+    //     switch (message.messageType) {
+    //       case ServerMessageType.success:
+    //         console.log(message.message);
             
-            break;
-          case ServerMessageType.error:
-            console.log('error');
+    //         break;
+    //       case ServerMessageType.error:
+    //         console.log('error');
   
-            break;
-          case ServerMessageType.executionReport:
-            console.log('executionReport');
+    //         break;
+    //       case ServerMessageType.executionReport:
+    //         console.log('executionReport');
   
-            break;
-          case ServerMessageType.marketDataUpdate:
-            console.log('marketDataUpdate');
+    //         break;
+    //       case ServerMessageType.marketDataUpdate:
+    //         console.log('marketDataUpdate');
   
-            break;
-          case ServerMessageType.tableDataUpdate:
-            console.log('change td', tableData);
-            setTableData(message.message as Offer[])
+    //         break;
+    //       case ServerMessageType.tableDataUpdate:
+    //         console.log('change td', tableData);
+    //         setTableData(message.message as Offer[])
             
-            console.log('updated td', tableData);
+    //         console.log('updated td', tableData);
           
-            break;
-        }
-      };
-    }
+    //         break;
+    //     }
+    //   };
+    // }
   }
 
   function sendMessage() { 
