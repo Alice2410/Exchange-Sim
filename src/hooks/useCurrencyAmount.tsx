@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 
-
 export const useCurrencyAmount = () => {
   const [value, setValue] = useState('1');
 
