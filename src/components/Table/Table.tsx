@@ -24,9 +24,9 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-        {tableData.map((item, index) => {
+        {tableData.map((offer, index) => {
           return(
-            <OrderRecord index={index} item={item}></OrderRecord>
+            <OrderRecord key={index} index={index} offer={offer}></OrderRecord>
           )
         })}
         </tbody>
